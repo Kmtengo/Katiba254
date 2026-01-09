@@ -1,27 +1,65 @@
-# Java heap dumps
+# =====================================
+# Katiba Project .gitignore
+# =====================================
+
+# Java heap dumps (memory snapshots - can be very large)
 *.hprof
 
-# Gradle
+# =====================================
+# Gradle & Build
+# =====================================
 .gradle/
 build/
+**/build/
 !gradle/wrapper/gradle-wrapper.jar
+!**/src/**/build/
 
-# IDE
+# Gradle cache
+.gradle/
+gradle-app.setting
+
+# =====================================
+# IDE - IntelliJ IDEA / Android Studio
+# =====================================
 .idea/
 *.iml
 *.ipr
 *.iws
+.idea_modules/
+out/
 
+# =====================================
 # Local configuration
+# =====================================
 local.properties
+*.local
 
-# OS
+# =====================================
+# OS generated files
+# =====================================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Kotlin
+# =====================================
+# Compiled files
+# =====================================
 *.class
+*.dex
+*.ap_
+*.apk
+*.aab
+
+# =====================================
+# Package files
+# =====================================
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
@@ -29,8 +67,54 @@ Thumbs.db
 *.tar.gz
 *.rar
 
-# Android
+# =====================================
+# Android specific
+# =====================================
 /captures
-.externalNativeBuild
-.cxx
+.externalNativeBuild/
+.cxx/
+*.keystore
+!debug.keystore
+
+# Generated files
+gen/
+out/
+
+# Android Studio Navigation editor temp files
+.navigation/
+
+# Android Studio captures folder
+captures/
+
+# =====================================
+# iOS / Kotlin Native
+# =====================================
+iosApp/Pods/
+iosApp/.build/
+*.xcuserstate
+*.xcworkspace
+xcuserdata/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# =====================================
+# Kotlin Multiplatform
+# =====================================
+kotlin-js-store/
+.kotlin/
+
+# =====================================
+# Logs
+# =====================================
+*.log
+
+# =====================================
+# Temporary files
+# =====================================
+*.tmp
+*.temp
+*.swp
+*~
 
