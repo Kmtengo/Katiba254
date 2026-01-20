@@ -85,6 +85,7 @@ data class UserProfile(
     val streak: Int = 0,
     val longestStreak: Int = 0,
     val totalLessonsCompleted: Int = 0,
+    val xp: Int = 0,
     val badges: List<Badge> = emptyList()
 )
 

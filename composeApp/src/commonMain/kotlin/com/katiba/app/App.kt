@@ -106,7 +106,8 @@ private fun AppContent() {
             currentKey is HomeRoute ||
             currentKey is ConstitutionRoute ||
             currentKey is PlansRoute ||
-            currentKey is ProfileRoute
+            currentKey is ProfileRoute ||
+            currentKey is MzalendoRoute
         }
 
         Scaffold(

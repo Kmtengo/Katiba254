@@ -54,30 +54,33 @@ fun LessonScreen(
     
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    if (lesson != null) {
-                        Text(
-                            text = lesson.title,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                    } else {
-                        Text("Lesson")
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
+            Column {
+                TopAppBar(
+                    title = {
+                        if (lesson != null) {
+                            Text(
+                                text = lesson.title,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold
+                            )
+                        } else {
+                            Text("Lesson")
+                        }
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBackClick) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background
+                    )
                 )
-            )
+                HorizontalDivider(thickness = 2.dp, color = Color.Gray.copy(alpha = 0.3f))
+            }
         }
     ) { paddingValues ->
         Column(

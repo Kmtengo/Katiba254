@@ -1,5 +1,6 @@
 package com.katiba.app.ui.home
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -21,15 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.katiba.app.data.repository.SampleDataRepository
-import com.katiba.app.ui.components.PageIndicator
 import com.katiba.app.ui.theme.KatibaColors
 import kotlinx.coroutines.launch
 
 /**
  * Multi-page detail view for AI Description and Video
  * Navigation: Tap left/right sides of screen to switch pages
+ * Uses Instagram/story-style progress indicators at the top
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AIDescriptionScreen(
     onBackClick: () -> Unit,
@@ -38,118 +37,139 @@ fun AIDescriptionScreen(
     val dailyContent = remember { SampleDataRepository.getDailyContent() }
     val pagerState = rememberPagerState(pageCount = { 2 })
     val scope = rememberCoroutineScope()
-    
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { 
-                    Text(
-                        text = if (pagerState.currentPage == 0) "AI Explanation" else "Video Lesson"
-                    ) 
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Close"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        // Main content pager
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+        ) { page ->
+            when (page) {
+                0 -> AITextDescriptionPage(
+                    description = dailyContent.aiDescription,
+                    articleNumber = dailyContent.articleNumber,
+                    articleTitle = dailyContent.articleTitle
                 )
-            )
+                1 -> VideoPage(
+                    videoUrl = dailyContent.videoUrl,
+                    educatorName = dailyContent.educatorName,
+                    articleTitle = dailyContent.articleTitle
+                )
+            }
         }
-    ) { paddingValues ->
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+
+        // Top bar with story progress indicators
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.95f))
+                .statusBarsPadding()
+                .padding(top = 8.dp)
         ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                when (page) {
-                    0 -> AITextDescriptionPage(
-                        description = dailyContent.aiDescription,
-                        articleNumber = dailyContent.articleNumber,
-                        articleTitle = dailyContent.articleTitle
-                    )
-                    1 -> VideoPage(
-                        videoUrl = dailyContent.videoUrl,
-                        educatorName = dailyContent.educatorName,
-                        articleTitle = dailyContent.articleTitle
-                    )
-                }
-            }
-            
-            // Left tap zone for previous page
-            if (pagerState.currentPage > 0) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(60.dp)
-                        .align(Alignment.CenterStart)
-                        .clickable {
-                            scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                            }
-                        }
-                )
-            }
-            
-            // Right tap zone for next page
-            if (pagerState.currentPage < 1) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(60.dp)
-                        .align(Alignment.CenterEnd)
-                        .clickable {
-                            scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                            }
-                        }
-                )
-            }
-            
-            // Page indicator at bottom
-            PageIndicator(
+            // Story-style progress indicators
+            StoryProgressIndicator(
                 pageCount = 2,
                 currentPage = pagerState.currentPage,
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 24.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             )
-            
-            // Navigation hints
+
+            // Close button row
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 56.dp)
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                if (pagerState.currentPage > 0) {
-                    Text(
-                        text = "← Text",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                } else {
-                    Spacer(modifier = Modifier.width(1.dp))
-                }
-                
-                if (pagerState.currentPage < 1) {
-                    Text(
-                        text = "Video →",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Close",
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
+
+                // Optional: Page title
+                Text(
+                    text = if (pagerState.currentPage == 0) "AI Explanation" else "Video Lesson",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                // Spacer for symmetry
+                Spacer(modifier = Modifier.width(48.dp))
             }
+        }
+
+        // Left tap zone for previous page
+        if (pagerState.currentPage > 0) {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(80.dp)
+                    .align(Alignment.CenterStart)
+                    .clickable {
+                        scope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                        }
+                    }
+            )
+        }
+
+        // Right tap zone for next page
+        if (pagerState.currentPage < 1) {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(80.dp)
+                    .align(Alignment.CenterEnd)
+                    .clickable {
+                        scope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
+                    }
+            )
+        }
+    }
+}
+
+/**
+ * Instagram/Story-style horizontal segmented progress indicator
+ */
+@Composable
+private fun StoryProgressIndicator(
+    pageCount: Int,
+    currentPage: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        repeat(pageCount) { index ->
+            val isActive = index <= currentPage
+            val animatedWeight by animateFloatAsState(
+                targetValue = if (isActive) 1f else 0.7f,
+                label = "progressWeight"
+            )
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(3.dp)
+                    .clip(RoundedCornerShape(1.5.dp))
+                    .background(
+                        if (isActive) Color.White else Color.Gray.copy(alpha = 0.4f)
+                    )
+            )
         }
     }
 }
@@ -161,12 +181,14 @@ private fun AITextDescriptionPage(
     articleTitle: String
 ) {
     val scrollState = rememberScrollState()
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(20.dp)
+            .padding(top = 120.dp) // Account for top bar
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 20.dp)
     ) {
         // AI badge
         Surface(
@@ -190,9 +212,9 @@ private fun AITextDescriptionPage(
                 )
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         // Article reference
         Text(
             text = "Article $articleNumber",
@@ -205,9 +227,9 @@ private fun AITextDescriptionPage(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         // Beadwork accent line
         Box(
             modifier = Modifier
@@ -224,9 +246,9 @@ private fun AITextDescriptionPage(
                     )
                 )
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         // AI description text
         Text(
             text = description,
@@ -234,7 +256,7 @@ private fun AITextDescriptionPage(
             color = MaterialTheme.colorScheme.onBackground,
             lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.6f
         )
-        
+
         Spacer(modifier = Modifier.height(48.dp))
     }
 }
@@ -248,7 +270,9 @@ private fun VideoPage(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(top = 120.dp) // Account for top bar
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 20.dp)
     ) {
         // Video player placeholder (will be replaced with actual video player)
         Box(
@@ -279,17 +303,17 @@ private fun VideoPage(
                         )
                     }
                 }
-                
+
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 Text(
                     text = "Video Lesson",
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.White
                 )
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Text(
                     text = articleTitle,
                     style = MaterialTheme.typography.bodyMedium,
@@ -297,9 +321,9 @@ private fun VideoPage(
                 )
             }
         }
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         // Educator info
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -321,7 +345,7 @@ private fun VideoPage(
                     fontWeight = FontWeight.Bold
                 )
             }
-            
+
             Column {
                 Text(
                     text = educatorName,

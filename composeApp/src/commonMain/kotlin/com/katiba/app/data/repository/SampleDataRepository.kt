@@ -120,17 +120,15 @@ object SampleDataRepository {
             Lesson("lesson_7", "Citizenship by Birth", "Who qualifies as a Kenyan citizen", 3, 1, 70),
             Lesson("lesson_8", "Registration & Dual Citizenship", "Acquiring Kenyan citizenship", 3, 2, 70),
 
-            // Chapter 4 - Bill of Rights
-            Lesson("lesson_9", "Your Fundamental Rights", "Overview of the Bill of Rights", 4, 1, 80),
-            Lesson("lesson_10", "Right to Life", "The most fundamental human right", 4, 2, 80),
-            Lesson("lesson_11", "Equality for All", "Freedom from discrimination", 4, 3, 80),
-            Lesson("lesson_12", "Human Dignity", "Inherent worth of every person", 4, 4, 80),
-            Lesson("lesson_13", "Freedom & Security", "Protection from arbitrary detention", 4, 5, 80),
-            Lesson("lesson_14", "Privacy Rights", "Protection of personal information", 4, 6, 80),
-            Lesson("lesson_15", "Freedom of Expression", "Your right to speak and be heard", 4, 7, 80),
-            Lesson("lesson_16", "Political Rights", "Voting and political participation", 4, 8, 80),
-            Lesson("lesson_17", "Economic & Social Rights", "Health, education, and housing", 4, 9, 80),
-            Lesson("lesson_18", "Access to Justice", "Fair hearings and legal representation", 4, 10, 80),
+            // Chapter 4 - Bill of Rights (8 lessons, 3 completed to match design)
+            Lesson("lesson_9", "Your Fundamental Rights", "Overview of the Bill of Rights", 4, 1, 80, isCompleted = true, isLocked = false),
+            Lesson("lesson_10", "Right to Life", "The most fundamental human right", 4, 2, 80, isCompleted = true, isLocked = false),
+            Lesson("lesson_11", "Equality for All", "Freedom from discrimination", 4, 3, 80, isCompleted = true, isLocked = false),
+            Lesson("lesson_12", "Human Dignity", "Inherent worth of every person", 4, 4, 80, isCurrent = true, isLocked = false),
+            Lesson("lesson_13", "Freedom & Security", "Protection from arbitrary detention", 4, 5, 80, isLocked = false),
+            Lesson("lesson_14", "Privacy Rights", "Protection of personal information", 4, 6, 80, isLocked = false),
+            Lesson("lesson_15", "Freedom of Expression", "Your right to speak and be heard", 4, 7, 80, isLocked = false),
+            Lesson("lesson_16", "Political Rights", "Voting and political participation", 4, 8, 80, isLocked = false),
 
             // Chapter 5
             Lesson("lesson_19", "Land Ownership", "Principles of land in Kenya", 5, 1, 70),
@@ -152,20 +150,21 @@ object SampleDataRepository {
     fun getUserProfile(): UserProfile {
         return UserProfile(
             id = "user_001",
-            name = "Amani Wanjiku",
-            email = "amani@example.com",
-            county = "Nairobi",
+            name = "Wanjiku Kamau",
+            email = "wanjiku@example.com",
+            county = "Nairobi City (047)",
             constituency = "Westlands",
-            ward = "Parklands",
-            joinedDate = "2024-06-15",
-            streak = 7,
+            ward = "Kitisuru",
+            joinedDate = "2023",
+            streak = 12,
             longestStreak = 21,
             totalLessonsCompleted = 15,
+            xp = 1250,
             badges = listOf(
-                Badge("badge_1", "Constitution Starter", "Completed your first lesson", "", "2024-06-15", true),
-                Badge("badge_2", "Rights Champion", "Completed the Bill of Rights chapter", "", "2024-08-20", true),
-                Badge("badge_3", "Week Warrior", "Maintained a 7-day streak", "", "2024-12-29", true),
-                Badge("badge_4", "Master Scholar", "Complete all lessons", "", null, false),
+                Badge("badge_1", "Civic Defender", "Completed your first civic lesson", "", "2023-06-15", true),
+                Badge("badge_2", "Rights Expert", "Completed the Bill of Rights chapter", "", null, false),
+                Badge("badge_3", "Voter Ready", "Completed voter education module", "", null, false),
+                Badge("badge_4", "Scholar", "Complete all lessons", "", null, false),
                 Badge("badge_5", "Community Leader", "Share with 10 friends", "", null, false)
             )
         )
