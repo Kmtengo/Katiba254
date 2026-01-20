@@ -47,7 +47,7 @@
                 },
                 {
                   "label": "b",
-                  "text": "the county level. 1 Constitution of Kenya Kenya"
+                  "text": "the county level."
                 }
               ]
             }
@@ -194,7 +194,7 @@
           "title": "State and religion",
           "clauses": [
             {
-              "number": "",
+              "number": "1",
               "text": "There shall be no State religion",
               "subClauses": []
             }
@@ -256,7 +256,7 @@
             },
             {
               "number": "5",
-              "text": "Parliament may enact legislation prescribing other public holidays, and providing for observance of public holidays",
+              "text": "Parliament may enact legislation prescribing other public holidays and providing for observance of public holidays",
               "subClauses": []
             }
           ]
@@ -376,18 +376,8 @@
             },
             {
               "number": "2",
-              "text": "A passport or other document referred to in clause",
+              "text": "A passport or other document referred to in clause (1)(b) may be denied, suspended or confiscated only in accordance with an Act of Parliament that satisfies the criteria referred to in Article 24.",
               "subClauses": []
-            },
-            {
-              "number": "1",
-              "text": "",
-              "subClauses": [
-                {
-                  "label": "b",
-                  "text": "may be denied, suspended or conﬁscated only in accordance with an Act of Parliament that satisﬁes the criteria referred to in Article 24"
-                }
-              ]
             }
           ]
         },
@@ -423,27 +413,12 @@
             },
             {
               "number": "2",
-              "text": "Clause",
-              "subClauses": []
-            },
-            {
-              "number": "1",
-              "text": "applies equally to a person born before the effective date, whether or not the person was born in Kenya, if either the mother or father of the person is or was a citizen",
+              "text": "Clause (1) applies equally to a person born before the effective date, whether or not the person was born in Kenya, if either the mother or father of the person is or was a citizen.",
               "subClauses": []
             },
             {
               "number": "3",
-              "text": "Parliament may enact legislation limiting the effect of clauses",
-              "subClauses": []
-            },
-            {
-              "number": "1",
-              "text": "and",
-              "subClauses": []
-            },
-            {
-              "number": "2",
-              "text": "on the descendents of Kenyan citizens who are born outside Kenya",
+              "text": "Parliament may enact legislation limiting the effect of clauses (1) and (2) on the descendents of Kenyan citizens who are born outside Kenya.",
               "subClauses": []
             },
             {
@@ -453,7 +428,7 @@
             },
             {
               "number": "5",
-              "text": "A person who is a Kenyan citizen by birth and who has ceased to be a Kenyan citizen because the person acquired citizenship of another country, is entitled on application to regain Kenyan citizenship. 4 Constitution of Kenya Kenya",
+              "text": "A person who is a Kenyan citizen by birth and who has ceased to be a Kenyan citizen because the person acquired citizenship of another country, is entitled on application to regain Kenyan citizenship.",
               "subClauses": []
             }
           ]
@@ -494,7 +469,7 @@
           "title": "Dual citizenship",
           "clauses": [
             {
-              "number": "",
+              "number": "1",
               "text": "A citizen by birth does not lose citizenship by acquiring the citizenship of another country",
               "subClauses": []
             }
@@ -522,22 +497,23 @@
                 },
                 {
                   "label": "d",
-                  "text": "the person has, at any time after registration, been convicted of treason, or of an offence for which—"
-                },
-                {
-                  "label": "i",
-                  "text": "a penalty of at least seven years imprisonment may be imposed; or (ii) a more severe penalty may be imposed"
+                  "text": "the person has, at any time after registration, been convicted of treason, or of an offence for which—",
+                  "subSubClauses": [
+                    {
+                      "label": "i",
+                      "text": "a penalty of at least seven years imprisonment may be imposed; or "
+                    },
+                    {
+                      "label": "ii",
+                      "text": "a more severe penalty may be imposed."
+                    }
+                  ]
                 }
               ]
             },
             {
               "number": "2",
-              "text": "The citizenship of a person who was presumed to be a citizen by birth, as contemplated in Article 14",
-              "subClauses": []
-            },
-            {
-              "number": "4",
-              "text": ", may be revoked if—",
+              "text": "The citizenship of a person who was presumed to be a citizen by birth, as contemplated in Article 14(4), may be revoked if—",
               "subClauses": [
                 {
                   "label": "a",
@@ -560,9 +536,38 @@
           "title": "Legislation on citizenship",
           "clauses": [
             {
-              "number": "",
-              "text": "Parliament shall enact legislation— (a) prescribing procedures by which a person may become a citizen; 5 Constitution of Kenya Kenya (b) governing entry into and residence in Kenya; (c) providing for the status of permanent residents; (d) providing for voluntary renunciation of citizenship; (e) prescribing procedures for revocation of citizenship; (f) prescribing the duties and rights of citizens; and (g) generally giving effect to the provisions of this Chapter",
-              "subClauses": []
+              "number": "1",
+              "text": "Parliament shall enact legislation—",
+              "subClauses": [
+                {
+                  "label": "a",
+                  "text": "prescribing procedures by which a person may become a citizen;"
+                },
+                {
+                  "label": "b",
+                  "text": "governing entry into and residence in Kenya;"
+                },
+                {
+                  "label": "c",
+                  "text": "providing for the status of permanent residents; "
+                },
+                {
+                  "label": "d",
+                  "text": "providing for voluntary renunciation of citizenship;"
+                },
+                {
+                  "label": "e",
+                  "text": "prescribing procedures for revocation of citizenship;"
+                },
+                {
+                  "label": "f",
+                  "text": "prescribing the duties and rights of citizens; and"
+                },
+                {
+                  "label": "g",
+                  "text": "generally giving effect to the provisions of this Chapter."
+                }
+              ]
             }
           ]
         }
@@ -2318,11 +2323,6 @@
     },
     {
       "number": 5,
-      "title": "n,",
-      "articles": []
-    },
-    {
-      "number": 5,
       "title": "LAND AND ENVIRONMENT",
       "articles": [
         {
@@ -2420,17 +2420,7 @@
                 },
                 {
                   "label": "g",
-                  "text": "government forests other than forests to which Article 63"
-                }
-              ]
-            },
-            {
-              "number": "2",
-              "text": "",
-              "subClauses": [
-                {
-                  "label": "i",
-                  "text": "applies, government game reserves, water catchment areas, national parks, government animal sanctuaries, and specially protected areas; 21 Constitution of Kenya Kenya"
+                  "text": "government forests other than forests to which Article 63(2)(d)(i) applies, government game reserves, water catchment areas, national parks, government animal sanctuaries, and specially protected areas;"
                 },
                 {
                   "label": "h",
@@ -2458,11 +2448,17 @@
                 },
                 {
                   "label": "n",
-                  "text": "any other land declared to be public land by an Act of Parliament—"
-                },
-                {
-                  "label": "i",
-                  "text": "in force at the effective date; or (ii) enacted after the effective date"
+                  "text": "any other land declared to be public land by an Act of Parliament—",
+                  "subSubClauses": [
+                    {
+                      "label": "i",
+                      "text": "in force at the effective date; or"
+                    },
+                    {
+                      "label": "ii",
+                      "text": "enacted after the effective date."
+                    }
+                  ]
                 }
               ]
             },
@@ -2472,64 +2468,18 @@
               "subClauses": [
                 {
                   "label": "a",
-                  "text": "clause"
-                }
-              ]
-            },
-            {
-              "number": "1",
-              "text": "",
-              "subClauses": [
-                {
-                  "label": "a",
-                  "text": ","
-                },
-                {
-                  "label": "c",
-                  "text": ","
-                },
-                {
-                  "label": "d",
-                  "text": "or"
-                },
-                {
-                  "label": "e",
-                  "text": "; and"
+                  "text": "clause (1)(a), (c), (d) or (e); and"
                 },
                 {
                   "label": "b",
-                  "text": "clause"
-                }
-              ]
-            },
-            {
-              "number": "1",
-              "text": "",
-              "subClauses": [
-                {
-                  "label": "b",
-                  "text": ", other than land held, used or occupied by a national State organ"
+                  "text": "clause (1)(b), other than land held, used or occupied by a national State organ."
                 }
               ]
             },
             {
               "number": "3",
-              "text": "Public land classiﬁed under clause",
+              "text": "Public land classiﬁed under clause (1) (f) to (m) shall vest in and be held by the national government in trust for the people of Kenya and shall be administered on their behalf by the National Land Commission.",
               "subClauses": []
-            },
-            {
-              "number": "1",
-              "text": "",
-              "subClauses": [
-                {
-                  "label": "f",
-                  "text": "to"
-                },
-                {
-                  "label": "m",
-                  "text": "shall vest in and be held by the national government in trust for the people of Kenya and shall be administered on their behalf by the National Land Commission"
-                }
-              ]
             },
             {
               "number": "4",
@@ -2565,11 +2515,22 @@
                 },
                 {
                   "label": "d",
-                  "text": "land that is—"
-                },
-                {
-                  "label": "i",
-                  "text": "lawfully held, managed or used by speciﬁc communities as community forests, grazing areas or shrines; (ii) ancestral lands and lands traditionally occupied by hunter-gatherer communities; or (iii) lawfully held as trust land by the county governments, but not including any public land held in trust by the county government under Article 62"
+                  "text": "land that is—",
+                  "subSubClauses": [
+                    {
+                      "label": "i",
+                      "text": "lawfully held, managed or used by specific communities as community forests, grazing\nareas or shrines;"
+                    },
+                    {
+                      "label": "ii",
+                      "text": "ancestral lands and lands traditionally occupied by hunter-gatherer communities; or"
+                    },
+                    {
+                      "label": "iii",
+                      "text": "lawfully held as trust land by the county governments,"
+                    }
+                  ],
+                  "text": "but not including any public land held in trust by the county government under Article 62(2)."
                 }
               ]
             },
@@ -2597,11 +2558,21 @@
         },
         {
           "number": 64,
-          "title": "Private land",
+          "title": "Private land consists of -",
           "clauses": [
             {
-              "number": "",
-              "text": "Private land consists of — (a) registered land held by any person under any freehold tenure; (b) land held by any person under leasehold tenure; and (c) any other land declared private land under an Act of Parliament",
+              "number": "1",
+              "text": "registered land held by any person under any freehold tenure;",
+              "subClauses": []
+            },
+            {
+              "number": "2",
+              "text": "land held by any person under leasehold tenure; and",
+              "subClauses": []
+            },
+            {
+              "number": "3",
+              "text": "any other land declared private land under an Act of Parliament.",
               "subClauses": []
             }
           ]
@@ -3109,23 +3080,6 @@
             {
               "number": "",
               "text": "Parliament shall enact legislation to establish an independent ethics and anti-corruption commission, which shall be and have the status and powers of a commission under",
-              "subClauses": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "number": 8,
-      "title": "n, for purposes of",
-      "articles": [
-        {
-          "number": 80,
-          "title": "Legislation on leadership",
-          "clauses": [
-            {
-              "number": "",
-              "text": "Parliament shall enact legislation— (a) establishing procedures and mechanisms for the effective administration of this Chapter; (b) prescribing the penalties, in addition to the penalties referred to in Article 75, that may be imposed for a contravention of this Chapter; (c) providing for the application of this Chapter, with the necessary modiﬁcations, to public ofﬁcers; and (d) making any other provision necessary for ensuring the promotion of the principles of leadership and integrity referred to in this Chapter, and the enforcement of this Chapter",
               "subClauses": []
             }
           ]
@@ -13228,6 +13182,23 @@
           ]
         }
       ]
+    }
+  ]
+}
+      "articles": []
+    },
+    {
+      "number": 34,
+      "title": "ARTICLE",
+      "articles": []
+    },
+    {
+      "number": 12,
+      "title": "PUBLIC FINANCE",
+      "articles": []
+    },
+    {
+      "number": 13,
     },
     {
       "number": 22,
@@ -13287,23 +13258,6 @@
     {
       "number": 11,
       "title": "DEVOLVED GOVERNMENT",
-      "articles": []
-    },
-    {
-      "number": 34,
-      "title": "ARTICLE",
-      "articles": []
-    },
-    {
-      "number": 12,
-      "title": "PUBLIC FINANCE",
-      "articles": []
-    },
-    {
-      "number": 13,
-      "title": "PUBLIC SERVICE",
-      "articles": []
-    },
     {
       "number": 14,
       "title": "NATIONAL SECURITY",

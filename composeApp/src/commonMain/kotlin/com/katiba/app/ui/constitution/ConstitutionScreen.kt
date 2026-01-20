@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.katiba.app.data.model.Chapter
-import com.katiba.app.data.repository.SampleDataRepository
+import com.katiba.app.data.repository.ConstitutionRepository
 import com.katiba.app.ui.theme.KatibaColors
 
 /**
@@ -28,25 +28,29 @@ import com.katiba.app.ui.theme.KatibaColors
 @Composable
 fun ConstitutionScreen(
     onChapterClick: (Int) -> Unit,
+    onPreambleClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val chapters = remember { SampleDataRepository.getChapters() }
+    val chapters = remember { ConstitutionRepository.chapters }
     var selectedChapter by remember { mutableStateOf<Chapter?>(null) }
     var showChapterList by remember { mutableStateOf(true) }
     
     Scaffold(
         topBar = {
             TopAppBar(
+                modifier = Modifier.height(56.dp),
                 title = {
-                    Column {
+                    Column(
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    ) {
                         Text(
                             text = "The Constitution",
-                            style = MaterialTheme.typography.titleLarge,
+                            style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = "of Kenya, 2010",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -61,7 +65,8 @@ fun ConstitutionScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
-                )
+                ),
+                windowInsets = WindowInsets(0.dp)
             )
         }
     ) { paddingValues ->
@@ -96,7 +101,8 @@ fun ConstitutionScreen(
                     onChapterClick = { chapter ->
                         selectedChapter = chapter
                         onChapterClick(chapter.number)
-                    }
+                    },
+                    onPreambleClick = onPreambleClick
                 )
             }
         }
@@ -106,7 +112,8 @@ fun ConstitutionScreen(
 @Composable
 private fun ChapterListView(
     chapters: List<Chapter>,
-    onChapterClick: (Chapter) -> Unit
+    onChapterClick: (Chapter) -> Unit,
+    onPreambleClick: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -120,7 +127,7 @@ private fun ChapterListView(
                 chapterTitle = "Preamble",
                 articleCount = 0,
                 isPreamble = true,
-                onClick = { /* Navigate to preamble */ }
+                onClick = onPreambleClick
             )
         }
         

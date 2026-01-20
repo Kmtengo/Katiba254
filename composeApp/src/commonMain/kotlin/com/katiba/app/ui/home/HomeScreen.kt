@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.katiba.app.data.model.DailyContent
+import com.katiba.app.data.model.Lesson
 import com.katiba.app.data.repository.SampleDataRepository
 import com.katiba.app.ui.theme.KatibaColors
 import kotlinx.datetime.Clock
@@ -87,9 +88,14 @@ fun HomeScreen(
     onTipsCardClick: () -> Unit,
     onNotificationsClick: () -> Unit,
     onMzalendoClick: () -> Unit,
+    onResumeLesson: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val dailyContent = remember { SampleDataRepository.getDailyContent() }
+    val lessons = remember { SampleDataRepository.getLessons() }
+    val currentLesson = remember(lessons) { lessons.find { it.isCurrent } }
+    val completedLessons = remember(lessons) { lessons.count { it.isCompleted } }
+    val totalLessons = remember(lessons) { lessons.size }
     val scrollState = rememberScrollState()
     var selectedTab by remember { mutableStateOf(HomeTab.TODAY) }
     var showStreakSheet by remember { mutableStateOf(false) }
@@ -147,6 +153,16 @@ fun HomeScreen(
                         onClick = onTipsCardClick
                     )
                     
+                    // Card 4: Learning Progress
+                    currentLesson?.let { lesson ->
+                        LearningProgressCard(
+                            currentLesson = lesson,
+                            lessonNumber = completedLessons + 1,
+                            completionPercentage = (completedLessons * 100) / totalLessons,
+                            onResumeClick = { onResumeLesson(lesson.id) }
+                        )
+                    }
+
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             } else {
@@ -431,6 +447,8 @@ private fun ClauseOfTheDayCard(
     onClick: () -> Unit
 ) {
     val gradientColors = remember { getGradientForDay() }
+    var isLiked by remember { mutableStateOf(false) }
+    var isBookmarked by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -545,7 +563,14 @@ private fun ClauseOfTheDayCard(
             )
 
             // Bottom Section
-            ClauseBottomSection(dailyContent = dailyContent)
+            ClauseBottomSection(
+                dailyContent = dailyContent,
+                isLiked = isLiked,
+                isBookmarked = isBookmarked,
+                onShareClick = { /* TODO: Implement share functionality */ },
+                onLikeClick = { isLiked = !isLiked },
+                onBookmarkClick = { isBookmarked = !isBookmarked }
+            )
         }
     }
 }
@@ -553,7 +578,12 @@ private fun ClauseOfTheDayCard(
 @Composable
 private fun ClauseBottomSection(
     dailyContent: DailyContent,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLiked: Boolean = false,
+    isBookmarked: Boolean = false,
+    onShareClick: () -> Unit = {},
+    onLikeClick: () -> Unit = {},
+    onBookmarkClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -600,26 +630,32 @@ private fun ClauseBottomSection(
                 }
             }
 
-            // Action buttons
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Icon(
-                    imageVector = Icons.Default.Share,
-                    contentDescription = "Share",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = "Like",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-                Icon(
-                    imageVector = BookmarkIcon,
-                    contentDescription = "Bookmark",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
+            // Action buttons - now clickable
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                IconButton(onClick = onShareClick) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                IconButton(onClick = onLikeClick) {
+                    Icon(
+                        imageVector = if (isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isLiked) "Unlike" else "Like",
+                        tint = if (isLiked) Color(0xFFFF6B6B) else Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                IconButton(onClick = onBookmarkClick) {
+                    Icon(
+                        imageVector = if (isBookmarked) BookmarkFilledIcon else BookmarkIcon,
+                        contentDescription = if (isBookmarked) "Remove bookmark" else "Bookmark",
+                        tint = if (isBookmarked) Color(0xFFFFD700) else Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
         }
     }
@@ -833,6 +869,185 @@ private fun TipsCard(
     }
 }
 
+/**
+ * Card 4: Learning Progress Card
+ * Shows the user's current lesson progress with a circular progress indicator
+ * and abstract watermark designs in the background
+ */
+@Composable
+private fun LearningProgressCard(
+    currentLesson: Lesson,
+    lessonNumber: Int,
+    completionPercentage: Int,
+    onResumeClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .drawBehind {
+                    // Abstract watermark designs - subtle geometric patterns
+                    val watermarkColor = Color(0xFFE8F5E9) // Very light green
+
+                    // Draw large abstract circles
+                    drawCircle(
+                        color = watermarkColor,
+                        radius = 120.dp.toPx(),
+                        center = Offset(size.width * 0.85f, size.height * 0.2f)
+                    )
+                    drawCircle(
+                        color = watermarkColor.copy(alpha = 0.5f),
+                        radius = 80.dp.toPx(),
+                        center = Offset(size.width * 0.1f, size.height * 0.9f)
+                    )
+
+                    // Draw abstract curved lines
+                    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 10f), 0f)
+                    drawLine(
+                        color = watermarkColor,
+                        start = Offset(0f, size.height * 0.3f),
+                        end = Offset(size.width * 0.4f, size.height * 0.1f),
+                        strokeWidth = 3.dp.toPx(),
+                        pathEffect = pathEffect
+                    )
+                    drawLine(
+                        color = watermarkColor,
+                        start = Offset(size.width * 0.6f, size.height * 0.9f),
+                        end = Offset(size.width, size.height * 0.6f),
+                        strokeWidth = 3.dp.toPx(),
+                        pathEffect = pathEffect
+                    )
+
+                    // Small decorative dots
+                    val dotColor = Color(0xFFDCEDC8)
+                    drawCircle(
+                        color = dotColor,
+                        radius = 6.dp.toPx(),
+                        center = Offset(size.width * 0.2f, size.height * 0.25f)
+                    )
+                    drawCircle(
+                        color = dotColor,
+                        radius = 4.dp.toPx(),
+                        center = Offset(size.width * 0.75f, size.height * 0.75f)
+                    )
+                    drawCircle(
+                        color = dotColor,
+                        radius = 8.dp.toPx(),
+                        center = Offset(size.width * 0.5f, size.height * 0.15f)
+                    )
+                }
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Left content
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Lesson label
+                    Text(
+                        text = "LESSON $lessonNumber",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = KatibaColors.KenyaRed,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    )
+
+                    // Lesson title
+                    Text(
+                        text = currentLesson.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    // Lesson description
+                    Text(
+                        text = currentLesson.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    // Resume button
+                    Button(
+                        onClick = onResumeClick,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = KatibaColors.KenyaRed
+                        ),
+                        shape = RoundedCornerShape(20.dp),
+                        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 8.dp)
+                    ) {
+                        Text(
+                            text = "Resume",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                // Right - Circular progress indicator
+                Box(
+                    modifier = Modifier.size(80.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    // Background circle
+                    CircularProgressIndicator(
+                        progress = { 1f },
+                        modifier = Modifier.fillMaxSize(),
+                        color = Color(0xFFE0E0E0),
+                        strokeWidth = 6.dp,
+                        trackColor = Color.Transparent
+                    )
+                    // Progress circle
+                    CircularProgressIndicator(
+                        progress = { completionPercentage / 100f },
+                        modifier = Modifier.fillMaxSize(),
+                        color = KatibaColors.KenyaGreen,
+                        strokeWidth = 6.dp,
+                        strokeCap = StrokeCap.Round,
+                        trackColor = Color.Transparent
+                    )
+                    // Percentage text
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "$completionPercentage",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = KatibaColors.KenyaGreen
+                        )
+                        Text(
+                            text = "%",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = KatibaColors.KenyaGreen,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Composable
 private fun ExpandedClauseView(
     dailyContent: DailyContent,
@@ -840,6 +1055,8 @@ private fun ExpandedClauseView(
 ) {
     var showMenu by remember { mutableStateOf(false) }
     val gradientColors = remember { getGradientForDay() }
+    var isLiked by remember { mutableStateOf(false) }
+    var isBookmarked by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -855,84 +1072,97 @@ private fun ExpandedClauseView(
                 .background(Color.Black.copy(alpha = 0.3f))
         )
 
-        // Top buttons
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 48.dp, start = 16.dp, end = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onClose) {
-                Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
-            }
-            
-            Box {
-                IconButton(onClick = { showMenu = true }) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "More", tint = Color.White)
-                }
-                DropdownMenu(
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false }
-                ) {
-                    DropdownMenuItem(
-                        text = { Text("Read Full Chapter") },
-                        onClick = { showMenu = false }
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Create Image") },
-                        onClick = { showMenu = false }
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Compare Versions") },
-                        onClick = { showMenu = false }
-                    )
-                    DropdownMenuItem(
-                        text = { Text("See Past Days") },
-                        onClick = { showMenu = false }
-                    )
-                }
-            }
-        }
-        
-        // Centered Content
+        // Main content in a Column to prevent overlap
         Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(horizontal = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
-            Text(
-                text = "Clause of the Day",
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.White.copy(alpha = 0.8f)
-            )
-            Text(
-                text = "Article ${dailyContent.articleNumber}, Clause ${dailyContent.clause.number}",
-                style = MaterialTheme.typography.headlineSmall,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "\"${dailyContent.clause.text}\"",
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    lineHeight = 42.sp,
-                    fontWeight = FontWeight.Medium
-                ),
-                color = Color.White,
-                textAlign = TextAlign.Center
+            // Top buttons
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 48.dp, start = 16.dp, end = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onClose) {
+                    Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+                }
+
+                Box {
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "More", tint = Color.White)
+                    }
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Read Full Chapter") },
+                            onClick = { showMenu = false }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Create Image") },
+                            onClick = { showMenu = false }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Compare Versions") },
+                            onClick = { showMenu = false }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("See Past Days") },
+                            onClick = { showMenu = false }
+                        )
+                    }
+                }
+            }
+
+            // Centered Content - uses weight to fill available space between top bar and bottom section
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Clause of the Day",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.White.copy(alpha = 0.8f)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Article ${dailyContent.articleNumber}, Clause ${dailyContent.clause.number}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "\"${dailyContent.clause.text}\"",
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        lineHeight = 42.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            // Bottom buttons/components - fixed at bottom, never overlapped
+            ClauseBottomSection(
+                dailyContent = dailyContent,
+                isLiked = isLiked,
+                isBookmarked = isBookmarked,
+                onShareClick = { /* TODO: Implement share functionality */ },
+                onLikeClick = { isLiked = !isLiked },
+                onBookmarkClick = { isBookmarked = !isBookmarked },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp, bottom = 64.dp)
             )
         }
-        
-        // Bottom buttons/components
-        ClauseBottomSection(
-            dailyContent = dailyContent,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(start = 24.dp, end = 24.dp, bottom = 64.dp)
-        )
     }
 }
 
@@ -1086,7 +1316,33 @@ private val WaterDropIcon: ImageVector
 
 private val BookmarkIcon: ImageVector
     get() = ImageVector.Builder(
-        name = "Bookmark",
+        name = "BookmarkOutline",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f
+    ).apply {
+        path(
+            fill = null,
+            stroke = SolidColor(Color.Black),
+            strokeLineWidth = 2f,
+            strokeLineCap = StrokeCap.Round
+        ) {
+            moveTo(17f, 3f)
+            horizontalLineTo(7f)
+            curveTo(5.9f, 3f, 5f, 3.9f, 5f, 5f)
+            verticalLineTo(21f)
+            lineTo(12f, 18f)
+            lineTo(19f, 21f)
+            verticalLineTo(5f)
+            curveTo(19f, 3.9f, 18.1f, 3f, 17f, 3f)
+            close()
+        }
+    }.build()
+
+private val BookmarkFilledIcon: ImageVector
+    get() = ImageVector.Builder(
+        name = "BookmarkFilled",
         defaultWidth = 24.dp,
         defaultHeight = 24.dp,
         viewportWidth = 24f,

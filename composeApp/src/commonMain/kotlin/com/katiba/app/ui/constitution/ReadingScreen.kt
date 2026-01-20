@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.katiba.app.data.model.Article
 import com.katiba.app.data.model.Chapter
 import com.katiba.app.data.model.Clause
-import com.katiba.app.data.repository.SampleDataRepository
+import com.katiba.app.data.repository.ConstitutionRepository
 import com.katiba.app.ui.theme.KatibaColors
 
 /**
@@ -42,7 +42,7 @@ fun ReadingScreen(
     onNavigateToArticle: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val chapters = remember { SampleDataRepository.getChapters() }
+    val chapters = remember { ConstitutionRepository.chapters }
     val chapter = remember(chapterNumber) {
         chapters.find { it.number == chapterNumber }
     }

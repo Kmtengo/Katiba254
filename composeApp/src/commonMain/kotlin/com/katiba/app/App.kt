@@ -12,6 +12,7 @@ import androidx.activity.compose.BackHandler
 import com.katiba.app.data.repository.ConstitutionRepository
 import com.katiba.app.ui.constitution.ClauseGridScreen
 import com.katiba.app.ui.constitution.ConstitutionScreen
+import com.katiba.app.ui.constitution.PreambleScreen
 import com.katiba.app.ui.constitution.ReadingScreen
 import com.katiba.app.ui.home.*
 import com.katiba.app.ui.navigation.*
@@ -157,6 +158,9 @@ private fun AppContent() {
                             },
                             onMzalendoClick = {
                                 backStack.add(MzalendoRoute)
+                            },
+                            onResumeLesson = { lessonId ->
+                                backStack.add(LessonRoute(lessonId))
                             }
                         )
                     }
@@ -196,7 +200,16 @@ private fun AppContent() {
                         ConstitutionScreen(
                             onChapterClick = { chapterNumber ->
                                 backStack.add(ClauseGridRoute(chapterNumber))
+                            },
+                            onPreambleClick = {
+                                backStack.add(PreambleRoute)
                             }
+                        )
+                    }
+
+                    entry<PreambleRoute> {
+                        PreambleScreen(
+                            onBackClick = { backStack.removeLast() }
                         )
                     }
 

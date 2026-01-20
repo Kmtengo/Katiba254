@@ -35,6 +35,9 @@ data class TipsRoute(val clauseId: String) : NavKey
 
 // Constitution reader screens
 @Serializable
+data object PreambleRoute : NavKey
+
+@Serializable
 data class ChapterListRoute(val searchQuery: String = "") : NavKey
 
 @Serializable
@@ -70,6 +73,7 @@ val navKeySerializersModule = SerializersModule {
         subclass(ClauseDetailRoute::class, ClauseDetailRoute.serializer())
         subclass(AIDescriptionRoute::class, AIDescriptionRoute.serializer())
         subclass(TipsRoute::class, TipsRoute.serializer())
+        subclass(PreambleRoute::class, PreambleRoute.serializer())
         subclass(ChapterListRoute::class, ChapterListRoute.serializer())
         subclass(ClauseGridRoute::class, ClauseGridRoute.serializer())
         subclass(ReadingRoute::class, ReadingRoute.serializer())
